@@ -87,10 +87,9 @@ const TermsOfService = () => {
             When premium subscriptions become available:
           </p>
           <ul style={{ color: 'var(--text-secondary)', lineHeight: 1.7, paddingLeft: '24px' }}>
-            <li><strong>Billing:</strong> Premium subscriptions are $4.99/month, billed monthly</li>
-            <li><strong>Cancellation:</strong> You may cancel anytime. No refunds for partial months</li>
-            <li><strong>Changes:</strong> We reserve the right to change pricing with 30 days notice</li>
-            <li><strong>Free Trial:</strong> 7-day free trial for new premium users. Cancel before trial ends to avoid charges</li>
+            <li><strong>Billing:</strong> Premium access is $9.99, billed as a one-time payment</li>
+            <li><strong>Refunds:</strong> All sales are final. No refunds are provided for one-time purchases</li>
+            <li><strong>Changes:</strong> We reserve the right to change pricing for future purchases</li>
           </ul>
         </section>
 

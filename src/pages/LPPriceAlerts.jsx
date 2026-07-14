@@ -240,7 +240,7 @@ const LPPriceAlerts = () => {
             </h2>
             <p style={{ color: 'var(--text-secondary)', lineHeight: 1.7, marginBottom: '32px' }}>
               The free plan includes real-time prices, 10-card tracking, and 30-day charts.
-              Need unlimited tracking and instant alerts? Go Pro for just $4.99/mo.
+              Need unlimited tracking and instant alerts? Go Premium for just $9.99 one-time.
             </p>
 
             <div style={{
@@ -257,10 +257,10 @@ const LPPriceAlerts = () => {
               </div>
               <div style={{ width: '1px', background: 'var(--border-warm)' }} />
               <div style={{ textAlign: 'center', flex: 1 }}>
-                <div style={{ fontSize: '2.5rem', fontFamily: 'var(--font-heading)', fontWeight: 500, color: 'var(--accent-terracotta)' }}>$4.99</div>
-                <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '16px' }}>per month</div>
+                <div style={{ fontSize: '2.5rem', fontFamily: 'var(--font-heading)', fontWeight: 500, color: 'var(--accent-terracotta)' }}>$9.99</div>
+                <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '16px' }}>one-time payment</div>
                 <button onClick={() => setAuthOpen(true)} className="btn-primary" style={{ width: '100%', justifyContent: 'center', padding: '14px' }}>
-                  Go Pro
+                  Go Premium
                 </button>
               </div>
             </div>

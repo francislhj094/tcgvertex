@@ -231,7 +231,7 @@ const LPFreeTracker = () => {
               { q: 'Is it really free?', a: 'Yes. The free plan lets you track up to 10 cards with real-time prices, 30-day history, and cloud sync. No credit card required, ever.' },
               { q: 'Where do the prices come from?', a: 'We pull live market data from TCGPlayer, the largest Pokémon TCG marketplace. Prices update in real-time.' },
               { q: 'Can I use it on my phone?', a: 'Absolutely. The entire platform is mobile-optimized and works beautifully on any device.' },
-              { q: 'What if I want to track more than 10 cards?', a: 'Our Pro plan ($4.99/mo) gives you unlimited tracking, price drop alerts, 90-day charts, and more. You can upgrade anytime.' }
+              { q: 'What if I want to track more than 10 cards?', a: 'Our Premium plan ($9.99 one-time payment) gives you unlimited tracking, price drop alerts, 90-day charts, and more. You can upgrade anytime.' }
             ].map((faq, i) => (
               <div key={i} style={{
                 padding: '24px 0',

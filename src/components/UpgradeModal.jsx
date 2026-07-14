@@ -78,11 +78,10 @@ const UpgradeModal = ({ isOpen, onClose }) => {
             borderRadius: 'var(--radius-md)',
           }}>
             <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'center', gap: '4px' }}>
-              <span style={{ fontSize: '2.5rem', fontWeight: 700, fontFamily: 'var(--font-heading)', color: 'var(--text-primary)' }}>$4.99</span>
-              <span style={{ color: 'var(--text-muted)', fontSize: '0.95rem' }}>/month</span>
+              <span style={{ fontSize: '2.5rem', fontWeight: 700, fontFamily: 'var(--font-heading)', color: 'var(--text-primary)' }}>$9.99</span>
             </div>
             <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginTop: '4px' }}>
-              Cancel anytime · 7-day free trial
+              One-time payment • Lifetime access
             </p>
           </div>
 
@@ -117,14 +116,14 @@ const UpgradeModal = ({ isOpen, onClose }) => {
             }}
           >
             <Lightning size={20} weight="fill" />
-            Start 7-Day Free Trial
+            Upgrade Now
           </button>
 
           <p style={{
             textAlign: 'center', color: 'var(--text-muted)',
             fontSize: '0.75rem', marginTop: '12px',
           }}>
-            No credit card required to start your trial
+            Secure one-time payment
           </p>
         </div>
       </div>
