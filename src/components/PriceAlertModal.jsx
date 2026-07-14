@@ -14,6 +14,8 @@ const PriceAlertModal = ({ isOpen, onClose, card, currentPrice }) => {
     alertType: 'email',
     frequency: 'instant'
   });
+  const [alertMode, setAlertMode] = useState('standard');
+  const [arbitragePercent, setArbitragePercent] = useState(20);
 
   const [loading, setLoading] = useState(false);
 
@@ -41,8 +43,8 @@ const PriceAlertModal = ({ isOpen, onClose, card, currentPrice }) => {
       setName: card.set?.name || '',
       rarity: card.rarity || '',
       currentPrice: currentPrice,
-      targetPrice: parseFloat(alertData.targetPrice),
-      condition: alertData.condition,
+      targetPrice: alertMode === 'arbitrage' ? arbitragePercent : parseFloat(alertData.targetPrice),
+      condition: alertMode === 'arbitrage' ? 'arbitrage' : alertData.condition,
       alertType: alertData.alertType,
       frequency: alertData.frequency
     };
@@ -58,7 +60,10 @@ const PriceAlertModal = ({ isOpen, onClose, card, currentPrice }) => {
 
     try {
       await createAlert(alertPayload, user.uid);
-      addToast(`🔔 Price alert created! You'll be notified via email when ${card.name} ${getConditionText(alertData.condition)} $${alertData.targetPrice}`, 'success');
+      const msg = alertMode === 'arbitrage' 
+        ? `🔔 Arbitrage alert created! You'll be notified when listings drop ${arbitragePercent}% below market price.`
+        : `🔔 Price alert created! You'll be notified via email when ${card.name} ${getConditionText(alertData.condition)} $${alertData.targetPrice}`;
+      addToast(msg, 'success');
       onClose();
     } catch (error) {
       if (error.message === 'ALERT_EXISTS') {
@@ -219,112 +224,169 @@ const PriceAlertModal = ({ isOpen, onClose, card, currentPrice }) => {
 
           {/* Form */}
           <form onSubmit={handleSubmit} style={{ padding: '32px' }}>
-            {/* Condition Selector */}
-            <div style={{ marginBottom: '24px' }}>
-              <label style={{
-                display: 'block',
-                marginBottom: '12px',
-                fontSize: '0.9rem',
-                fontWeight: 600,
-                color: 'var(--text-primary)'
-              }}>
-                Alert Condition
-              </label>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px' }}>
-                {[
-                  { value: 'below', icon: TrendDown, label: 'Drops Below', color: 'var(--accent-green)' },
-                  { value: 'above', icon: TrendUp, label: 'Goes Above', color: 'var(--accent-red)' },
-                  { value: 'drops_to', icon: Lightning, label: 'Drops To', color: 'var(--accent-terracotta)' }
-                ].map(option => (
-                  <button
-                    key={option.value}
-                    type="button"
-                    onClick={() => setAlertData({ ...alertData, condition: option.value })}
-                    style={{
-                      padding: '16px 12px',
-                      background: alertData.condition === option.value ? option.color : 'var(--bg-secondary)',
-                      color: alertData.condition === option.value ? 'white' : 'var(--text-primary)',
-                      border: alertData.condition === option.value ? 'none' : '1.5px solid var(--border-warm)',
-                      borderRadius: 'var(--radius-md)',
-                      cursor: 'pointer',
-                      transition: 'all 0.2s',
-                      fontSize: '0.85rem',
-                      fontWeight: 500,
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      gap: '8px'
-                    }}
-                  >
-                    <option.icon size={24} weight="bold" />
-                    {option.label}
-                  </button>
-                ))}
-              </div>
+            {/* Mode Toggle */}
+            <div style={{ display: 'flex', gap: '8px', marginBottom: '24px', background: 'var(--bg-secondary)', padding: '6px', borderRadius: 'var(--radius-md)' }}>
+              <button
+                type="button"
+                onClick={() => setAlertMode('standard')}
+                style={{
+                  flex: 1, padding: '10px', border: 'none', borderRadius: 'var(--radius-sm)',
+                  background: alertMode === 'standard' ? 'var(--bg-white)' : 'transparent',
+                  color: alertMode === 'standard' ? 'var(--text-primary)' : 'var(--text-secondary)',
+                  fontWeight: alertMode === 'standard' ? 600 : 500,
+                  boxShadow: alertMode === 'standard' ? '0 2px 8px rgba(0,0,0,0.05)' : 'none',
+                  cursor: 'pointer', transition: 'all 0.2s'
+                }}
+              >
+                Standard Alert
+              </button>
+              <button
+                type="button"
+                onClick={() => setAlertMode('arbitrage')}
+                style={{
+                  flex: 1, padding: '10px', border: 'none', borderRadius: 'var(--radius-sm)',
+                  background: alertMode === 'arbitrage' ? 'var(--bg-white)' : 'transparent',
+                  color: alertMode === 'arbitrage' ? 'var(--accent-terracotta)' : 'var(--text-secondary)',
+                  fontWeight: alertMode === 'arbitrage' ? 600 : 500,
+                  boxShadow: alertMode === 'arbitrage' ? '0 2px 8px rgba(0,0,0,0.05)' : 'none',
+                  cursor: 'pointer', transition: 'all 0.2s',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px'
+                }}
+              >
+                <Lightning size={16} weight="fill" /> Arbitrage (Pro)
+              </button>
             </div>
 
-            {/* Target Price */}
-            <div style={{ marginBottom: '24px' }}>
-              <label style={{
-                display: 'block',
-                marginBottom: '8px',
-                fontSize: '0.9rem',
-                fontWeight: 600,
-                color: 'var(--text-primary)'
-              }}>
-                Target Price
-              </label>
-              <div style={{ position: 'relative' }}>
-                <span style={{
-                  position: 'absolute',
-                  left: '16px',
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  fontSize: '1.1rem',
-                  color: 'var(--text-secondary)',
-                  fontWeight: 500
-                }}>
-                  $
-                </span>
-                <input
-                  type="number"
-                  step="0.01"
-                  min="0.01"
-                  required
-                  value={alertData.targetPrice}
-                  onChange={(e) => setAlertData({ ...alertData, targetPrice: e.target.value })}
-                  placeholder="0.00"
-                  style={{
-                    width: '100%',
-                    padding: '14px 16px 14px 32px',
-                    border: '1.5px solid var(--border-warm)',
-                    borderRadius: 'var(--radius-md)',
-                    fontSize: '1.05rem',
-                    outline: 'none',
-                    transition: 'all 0.2s',
-                    fontFamily: 'var(--font-heading)',
-                    fontWeight: 500
-                  }}
-                  onFocus={e => e.target.style.borderColor = 'var(--accent-terracotta)'}
-                  onBlur={e => e.target.style.borderColor = 'var(--border-warm)'}
-                />
-              </div>
-              {alertData.targetPrice && (
-                <div style={{
-                  marginTop: '10px',
-                  padding: '12px',
-                  background: parseFloat(priceDifference) > 0 ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)',
-                  borderRadius: 'var(--radius-sm)',
-                  fontSize: '0.9rem',
-                  color: parseFloat(priceDifference) > 0 ? 'var(--accent-green)' : 'var(--accent-red)',
-                  fontWeight: 500
-                }}>
-                  {parseFloat(priceDifference) > 0 ? '↑' : '↓'} ${Math.abs(priceDifference)} ({Math.abs(percentDifference)}%)
-                  {alertData.condition === 'below' && parseFloat(priceDifference) > 0 && ' - Waiting for drop'}
-                  {alertData.condition === 'above' && parseFloat(priceDifference) < 0 && ' - Waiting for increase'}
+            {alertMode === 'standard' ? (
+              <>
+                {/* Condition Selector */}
+                <div style={{ marginBottom: '24px' }}>
+                  <label style={{
+                    display: 'block',
+                    marginBottom: '12px',
+                    fontSize: '0.9rem',
+                    fontWeight: 600,
+                    color: 'var(--text-primary)'
+                  }}>
+                    Alert Condition
+                  </label>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px' }}>
+                    {[
+                      { value: 'below', icon: TrendDown, label: 'Drops Below', color: 'var(--accent-green)' },
+                      { value: 'above', icon: TrendUp, label: 'Goes Above', color: 'var(--accent-red)' },
+                      { value: 'drops_to', icon: Lightning, label: 'Drops To', color: 'var(--accent-terracotta)' }
+                    ].map(option => (
+                      <button
+                        key={option.value}
+                        type="button"
+                        onClick={() => setAlertData({ ...alertData, condition: option.value })}
+                        style={{
+                          padding: '16px 12px',
+                          background: alertData.condition === option.value ? option.color : 'var(--bg-secondary)',
+                          color: alertData.condition === option.value ? 'white' : 'var(--text-primary)',
+                          border: alertData.condition === option.value ? 'none' : '1.5px solid var(--border-warm)',
+                          borderRadius: 'var(--radius-md)',
+                          cursor: 'pointer',
+                          transition: 'all 0.2s',
+                          fontSize: '0.85rem',
+                          fontWeight: 500,
+                          display: 'flex',
+                          flexDirection: 'column',
+                          alignItems: 'center',
+                          gap: '8px'
+                        }}
+                      >
+                        <option.icon size={24} weight="bold" />
+                        {option.label}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              )}
-            </div>
+
+                {/* Target Price */}
+                <div style={{ marginBottom: '24px' }}>
+                  <label style={{
+                    display: 'block',
+                    marginBottom: '8px',
+                    fontSize: '0.9rem',
+                    fontWeight: 600,
+                    color: 'var(--text-primary)'
+                  }}>
+                    Target Price
+                  </label>
+                  <div style={{ position: 'relative' }}>
+                    <span style={{
+                      position: 'absolute',
+                      left: '16px',
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                      fontSize: '1.1rem',
+                      color: 'var(--text-secondary)',
+                      fontWeight: 500
+                    }}>
+                      $
+                    </span>
+                    <input
+                      type="number"
+                      step="0.01"
+                      min="0.01"
+                      required
+                      value={alertData.targetPrice}
+                      onChange={(e) => setAlertData({ ...alertData, targetPrice: e.target.value })}
+                      placeholder="0.00"
+                      style={{
+                        width: '100%',
+                        padding: '14px 16px 14px 32px',
+                        border: '1.5px solid var(--border-warm)',
+                        borderRadius: 'var(--radius-md)',
+                        fontSize: '1.05rem',
+                        outline: 'none',
+                        transition: 'all 0.2s',
+                        fontFamily: 'var(--font-heading)',
+                        fontWeight: 500
+                      }}
+                      onFocus={e => e.target.style.borderColor = 'var(--accent-terracotta)'}
+                      onBlur={e => e.target.style.borderColor = 'var(--border-warm)'}
+                    />
+                  </div>
+                  {alertData.targetPrice && (
+                    <div style={{
+                      marginTop: '10px',
+                      padding: '12px',
+                      background: parseFloat(priceDifference) > 0 ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)',
+                      borderRadius: 'var(--radius-sm)',
+                      fontSize: '0.9rem',
+                      color: parseFloat(priceDifference) > 0 ? 'var(--accent-green)' : 'var(--accent-red)',
+                      fontWeight: 500
+                    }}>
+                      {parseFloat(priceDifference) > 0 ? '↑' : '↓'} ${Math.abs(priceDifference)} ({Math.abs(percentDifference)}%)
+                      {alertData.condition === 'below' && parseFloat(priceDifference) > 0 && ' - Waiting for drop'}
+                      {alertData.condition === 'above' && parseFloat(priceDifference) < 0 && ' - Waiting for increase'}
+                    </div>
+                  )}
+                </div>
+              </>
+            ) : (
+              <div style={{ marginBottom: '24px' }}>
+                <label style={{ display: 'block', marginBottom: '8px', fontSize: '0.9rem', fontWeight: 600 }}>Discount Threshold (%)</label>
+                <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '16px' }}>
+                  Alert me when a listing price (Low) drops this far below the current Market Price (${currentPrice.toFixed(2)}).
+                </p>
+                <input
+                  type="range"
+                  min="5" max="50" step="5"
+                  value={arbitragePercent}
+                  onChange={(e) => setArbitragePercent(Number(e.target.value))}
+                  style={{ width: '100%', marginBottom: '12px', accentColor: 'var(--accent-terracotta)' }}
+                />
+                <div style={{ textAlign: 'center', fontSize: '1.25rem', fontWeight: 600, color: 'var(--accent-terracotta)' }}>
+                  {arbitragePercent}% Below Market
+                </div>
+                <div style={{ textAlign: 'center', fontSize: '0.9rem', color: 'var(--text-secondary)', marginTop: '4px' }}>
+                  (Target Low: ${ (currentPrice * (1 - arbitragePercent/100)).toFixed(2) })
+                </div>
+              </div>
+            )}
 
             {/* Frequency */}
             <div style={{ marginBottom: '28px' }}>
@@ -363,15 +425,15 @@ const PriceAlertModal = ({ isOpen, onClose, card, currentPrice }) => {
             {/* Submit Button */}
             <button
               type="submit"
-              disabled={loading || !alertData.targetPrice}
+              disabled={loading || (alertMode === 'standard' && !alertData.targetPrice)}
               className="btn-primary"
               style={{
                 width: '100%',
                 justifyContent: 'center',
                 padding: '16px',
                 fontSize: '1.05rem',
-                opacity: loading || !alertData.targetPrice ? 0.6 : 1,
-                cursor: loading || !alertData.targetPrice ? 'not-allowed' : 'pointer'
+                opacity: loading || (alertMode === 'standard' && !alertData.targetPrice) ? 0.6 : 1,
+                cursor: loading || (alertMode === 'standard' && !alertData.targetPrice) ? 'not-allowed' : 'pointer'
               }}
             >
               {loading ? 'Creating Alert...' : (

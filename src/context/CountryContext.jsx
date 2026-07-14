@@ -115,6 +115,17 @@ export const CountryProvider = ({ children }) => {
   });
 
   useEffect(() => {
+    // Check if query parameter overrides country
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const countryParam = params.get('country')?.toUpperCase();
+      if (countryParam && COUNTRIES[countryParam]) {
+        setCountry(COUNTRIES[countryParam]);
+      }
+    } catch (error) {
+      console.error('Failed to parse country query param:', error);
+    }
+    
     // Only auto-detect once on first visit
     if (!hasAutoDetected) {
       localStorage.setItem('hasAutoDetected', 'true');

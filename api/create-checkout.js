@@ -14,7 +14,7 @@ export default async function handler(req, res) {
     const { priceId, userId, userEmail } = req.body;
 
     // Create Checkout Session
-    const session = await stripe.checkout.sessions.create({
+    const sessionConfig = {
       line_items: [
         {
           price: priceId,
@@ -25,11 +25,16 @@ export default async function handler(req, res) {
       success_url: `${req.headers.origin || 'https://tcgvertex.com'}/premium?success=true&session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${req.headers.origin || 'https://tcgvertex.com'}/premium?canceled=true`,
       client_reference_id: userId, // Link payment to user
-      customer_email: userEmail,
       metadata: {
         userId: userId,
       },
-    });
+    };
+
+    if (userEmail) {
+      sessionConfig.customer_email = userEmail;
+    }
+
+    const session = await stripe.checkout.sessions.create(sessionConfig);
 
     return res.status(200).json({
       sessionId: session.id,

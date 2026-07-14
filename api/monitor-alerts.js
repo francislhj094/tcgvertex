@@ -56,7 +56,8 @@ async function fetchCardPrice(cardId) {
       cardName: card.name,
       cardImage: card.images?.small || card.images?.large,
       setName: card.set?.name || '',
-      rarity: card.rarity || ''
+      rarity: card.rarity || '',
+      cardData: card
     };
   } catch (error) {
     console.error(`Error fetching price for card ${cardId}:`, error.message);
@@ -67,7 +68,7 @@ async function fetchCardPrice(cardId) {
 /**
  * Check if alert condition is met
  */
-function checkAlertCondition(alert, currentPrice) {
+function checkAlertCondition(alert, currentPrice, cardData) {
   const { condition, targetPrice, currentPrice: oldPrice } = alert;
 
   switch (condition) {
@@ -80,6 +81,21 @@ function checkAlertCondition(alert, currentPrice) {
     case 'drops_to':
       // Only trigger if price dropped from above target to below/at target
       return currentPrice <= targetPrice && oldPrice > targetPrice;
+
+    case 'arbitrage':
+      // targetPrice represents the discount percentage (e.g. 20 for 20%)
+      if (!cardData) return false;
+      const marketPrice = currentPrice; 
+      // Get the lowest listed price
+      const lowPrice = cardData.tcgplayer?.prices?.holofoil?.low || 
+                       cardData.tcgplayer?.prices?.normal?.low || 
+                       cardData.tcgplayer?.prices?.reverseHolofoil?.low || 
+                       cardData.tcgplayer?.prices?.unlimited?.low || 
+                       cardData.tcgplayer?.prices?.['1stEditionHolofoil']?.low || 
+                       marketPrice;
+      
+      const thresholdPrice = marketPrice * (1 - (targetPrice / 100));
+      return lowPrice <= thresholdPrice && lowPrice > 0;
 
     default:
       return false;
@@ -189,7 +205,7 @@ async function processAlert(alert) {
     });
 
     // Check if condition is met
-    const conditionMet = checkAlertCondition(alert, currentPrice);
+    const conditionMet = checkAlertCondition(alert, currentPrice, priceData.cardData);
 
     if (!conditionMet) {
       return { processed: true, triggered: false, reason: 'condition_not_met' };

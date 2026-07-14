@@ -78,20 +78,32 @@ export default async function handler(req, res) {
       try {
         const userId = session.client_reference_id || session.metadata.userId;
 
-        if (!userId) {
-          console.error('No userId found in session');
-          break;
+        if (!userId || userId === 'guest') {
+          // Handle guest purchase
+          const customerEmail = session.customer_details?.email || session.customer_email;
+          if (customerEmail) {
+            await db.collection('guest_purchases').doc(session.id).set({
+              email: customerEmail,
+              amountPaid: session.amount_total / 100,
+              claimed: false,
+              createdAt: admin.firestore.FieldValue.serverTimestamp()
+            });
+            console.log(`Saved guest purchase for email: ${customerEmail}`);
+          } else {
+            console.error('Guest purchase has no email associated');
+          }
+        } else {
+          // Handle logged in user purchase
+          await db.collection('users').doc(userId).set({
+            isPremium: true,
+            premiumActivatedAt: admin.firestore.FieldValue.serverTimestamp(),
+            stripeSessionId: session.id,
+            email: session.customer_details?.email || session.customer_email,
+            amountPaid: session.amount_total / 100
+          }, { merge: true });
+
+          console.log(`Successfully updated premium status for user: ${userId}`);
         }
-
-        await db.collection('users').doc(userId).set({
-          isPremium: true,
-          premiumActivatedAt: admin.firestore.FieldValue.serverTimestamp(),
-          stripeSessionId: session.id,
-          email: session.customer_email,
-          amountPaid: session.amount_total / 100
-        }, { merge: true });
-
-        console.log(`Successfully updated premium status for user: ${userId}`);
       } catch (error) {
         console.error('Failed to update Firestore:', error.message);
       }

@@ -16,6 +16,7 @@ const PremiumPage = () => {
   const { t } = useTranslation();
   const { formatPrice, country } = useCountry();
   const [verifying, setVerifying] = useState(false);
+  const [guestSuccess, setGuestSuccess] = useState(false);
 
   // Track page view for Facebook Pixel
   useEffect(() => {
@@ -36,18 +37,21 @@ const PremiumPage = () => {
     const success = searchParams.get('success');
     const sessionId = searchParams.get('session_id');
 
-    if (success === 'true' && sessionId && user && !user.isPremium) {
-      // Show verifying state - wait for webhook to update Firestore
-      setVerifying(true);
-
-      // Set timeout in case webhook takes too long
-      const timeout = setTimeout(() => {
-        setVerifying(false);
-        addToast('Payment processing is taking longer than expected. Please refresh in a moment.', 'info');
-        window.history.replaceState({}, document.title, '/premium');
-      }, 30000); // 30 seconds
-
-      return () => clearTimeout(timeout);
+    if (success === 'true' && sessionId) {
+      if (!user) {
+        // Guest purchase successful
+        setGuestSuccess(true);
+        addToast('Payment successful! Please create an account to claim your Premium status.', 'success');
+      } else if (!user.isPremium) {
+        // Logged in user purchase successful
+        setVerifying(true);
+        const timeout = setTimeout(() => {
+          setVerifying(false);
+          addToast('Payment processing is taking longer than expected. Please refresh in a moment.', 'info');
+          window.history.replaceState({}, document.title, '/premium');
+        }, 30000);
+        return () => clearTimeout(timeout);
+      }
     }
 
     const canceled = searchParams.get('canceled');
@@ -70,7 +74,13 @@ const PremiumPage = () => {
 
       window.history.replaceState({}, document.title, '/premium');
     }
-  }, [user?.isPremium, verifying, addToast, searchParams, country]);
+    
+    // If they were a guest who just signed up/logged in, the AuthContext 
+    // will claim the purchase and they will become premium.
+    if (guestSuccess && user?.isPremium) {
+      setGuestSuccess(false);
+    }
+  }, [user?.isPremium, verifying, guestSuccess, addToast, searchParams, country]);
 
   // Show verifying state while waiting for webhook
   if (verifying) {
@@ -103,6 +113,37 @@ const PremiumPage = () => {
           <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', lineHeight: 1.7 }}>
             {t('premium.verifyingMessage')}
           </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (guestSuccess && !user) {
+    return (
+      <div className="container" style={{ padding: '60px 24px', maxWidth: '800px' }}>
+        <Helmet>
+          <title>Claim Premium | PokéPrice Tracker</title>
+        </Helmet>
+        <div className="glass-panel" style={{
+          padding: '60px 40px',
+          textAlign: 'center',
+          background: 'linear-gradient(135deg, var(--bg-white) 0%, var(--accent-terracotta-tint) 100%)',
+          border: '2px solid var(--accent-terracotta)'
+        }}>
+          <CheckCircle size={64} color="var(--accent-green)" weight="fill" style={{ margin: '0 auto 24px' }} />
+          <h2 style={{ fontSize: '2rem', marginBottom: '16px' }}>
+            Payment Successful!
+          </h2>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '1.15rem', marginBottom: '32px' }}>
+            You purchased Premium as a guest. Please create an account or log in with the email you used at checkout to instantly claim your Lifetime Access.
+          </p>
+          <div style={{ display: 'flex', gap: '16px', justifyContent: 'center' }}>
+            {/* The AuthModal component from Navbar usually handles this, 
+                but we can just prompt them to use the top nav for now. */}
+            <p style={{ fontWeight: 600, color: 'var(--accent-terracotta)' }}>
+              Click "Sign In" in the top menu to create your account and activate Premium.
+            </p>
+          </div>
         </div>
       </div>
     );

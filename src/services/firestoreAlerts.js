@@ -32,7 +32,7 @@ const ALERT_LOGS_COLLECTION = 'alertLogs';
 //   rarity: string,
 //   currentPrice: number,
 //   targetPrice: number,
-//   condition: 'above' | 'below' | 'drops_to',
+//   condition: 'above' | 'below' | 'drops_to' | 'arbitrage',
 //   alertType: 'email' | 'push' | 'both',
 //   frequency: 'instant' | 'daily' | 'weekly',
 //   enabled: boolean,
@@ -296,7 +296,8 @@ export const getAlertStats = async (userId) => {
       byCondition: {
         below: alerts.filter((a) => a.condition === 'below').length,
         above: alerts.filter((a) => a.condition === 'above').length,
-        drops_to: alerts.filter((a) => a.condition === 'drops_to').length
+        drops_to: alerts.filter((a) => a.condition === 'drops_to').length,
+        arbitrage: alerts.filter((a) => a.condition === 'arbitrage').length
       },
       totalNotificationsSent: alerts.reduce((sum, a) => sum + (a.notificationsSent || 0), 0)
     };
@@ -307,7 +308,7 @@ export const getAlertStats = async (userId) => {
       enabled: 0,
       disabled: 0,
       triggered: 0,
-      byCondition: { below: 0, above: 0, drops_to: 0 },
+      byCondition: { below: 0, above: 0, drops_to: 0, arbitrage: 0 },
       totalNotificationsSent: 0
     };
   }
@@ -403,7 +404,7 @@ export const validateAlert = (alertData) => {
     errors.push('Current price is required');
   }
 
-  if (!['above', 'below', 'drops_to'].includes(alertData.condition)) {
+  if (!['above', 'below', 'drops_to', 'arbitrage'].includes(alertData.condition)) {
     errors.push('Invalid condition');
   }
 

@@ -111,6 +111,16 @@ const Footer = () => {
                 </li>
                 <li>
                   <Link
+                    to="/movers"
+                    style={{ transition: 'color 0.2s' }}
+                    onMouseOver={e => e.currentTarget.style.color = 'var(--accent-terracotta)'}
+                    onMouseOut={e => e.currentTarget.style.color = 'var(--text-secondary)'}
+                  >
+                    Market Movers
+                  </Link>
+                </li>
+                <li>
+                  <Link
                     to="/portfolio"
                     style={{ transition: 'color 0.2s' }}
                     onMouseOver={e => e.currentTarget.style.color = 'var(--accent-terracotta)'}
@@ -137,6 +147,16 @@ const Footer = () => {
                     onMouseOut={e => e.currentTarget.style.color = 'var(--text-secondary)'}
                   >
                     {t('footer.pricing')}
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/developer"
+                    style={{ transition: 'color 0.2s' }}
+                    onMouseOver={e => e.currentTarget.style.color = 'var(--accent-terracotta)'}
+                    onMouseOut={e => e.currentTarget.style.color = 'var(--text-secondary)'}
+                  >
+                    Developer API
                   </Link>
                 </li>
               </ul>

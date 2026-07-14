@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Heart, Trash, TrendUp, TrendDown, ArrowRight, Lightning, Sparkle, ShoppingCart, ChartLine } from 'phosphor-react';
+import { Heart, Trash, TrendUp, TrendDown, ArrowRight, Lightning, Sparkle, ShoppingCart, ChartLine, ShareNetwork } from 'phosphor-react';
 import { Link } from 'react-router-dom';
 import { getVault, removeFromVault } from '../services/vault';
 import { fetchCardsByIds, buildAffiliateLink } from '../services/api';
@@ -11,12 +11,16 @@ import { useCountry } from '../context/CountryContext';
 import CardSkeleton from '../components/CardSkeleton';
 import PortfolioValueChart from '../components/PortfolioValueChart';
 import PerformanceCards from '../components/PerformanceCards';
+import BulkImportModal from '../components/BulkImportModal';
+import ShareModal from '../components/ShareModal';
 
 const PortfolioPage = () => {
   const [cards, setCards] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [importModalOpen, setImportModalOpen] = useState(false);
+  const [shareModalOpen, setShareModalOpen] = useState(false);
   const { addToast } = useToast();
-  const { user } = useAuth();
+  const { user, isPremium } = useAuth();
   const { t } = useTranslation();
   const { formatPrice } = useCountry();
 
@@ -59,18 +63,42 @@ const PortfolioPage = () => {
       </Helmet>
 
       {/* Header */}
-      <header style={{ marginBottom: '48px' }}>
-        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
-          <span className="eyebrow-pill">
-            <Heart size={14} weight="fill" /> {t('portfolio.badge')}
-          </span>
+      <header style={{ marginBottom: '48px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '24px' }}>
+        <div>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
+            <span className="eyebrow-pill">
+              <Heart size={14} weight="fill" /> {t('portfolio.badge')}
+            </span>
+          </div>
+          <h1 style={{ fontSize: '3rem', marginBottom: '12px', letterSpacing: '-0.02em' }}>
+            {t('portfolio.title')} <span className="text-accent">{t('portfolio.titleAccent')}</span>
+          </h1>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '1.15rem', lineHeight: 1.6 }}>
+            {t('portfolio.subtitle')}
+          </p>
         </div>
-        <h1 style={{ fontSize: '3rem', marginBottom: '12px', letterSpacing: '-0.02em' }}>
-          {t('portfolio.title')} <span className="text-accent">{t('portfolio.titleAccent')}</span>
-        </h1>
-        <p style={{ color: 'var(--text-secondary)', fontSize: '1.15rem', lineHeight: 1.6 }}>
-          {t('portfolio.subtitle')}
-        </p>
+        
+        <div style={{ display: 'flex', gap: '12px' }}>
+          <button 
+            onClick={() => setShareModalOpen(true)}
+            className="btn-outline" 
+            style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 24px' }}
+          >
+            <ShareNetwork size={20} weight="bold" />
+            Share Profile
+          </button>
+          
+          {isPremium && (
+            <button 
+              onClick={() => setImportModalOpen(true)}
+              className="btn-outline" 
+              style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 24px' }}
+            >
+              <Lightning size={20} weight="fill" color="var(--accent-terracotta)" />
+              Bulk Import
+            </button>
+          )}
+        </div>
       </header>
 
       {/* Premium Stats Bar */}
@@ -402,6 +430,17 @@ const PortfolioPage = () => {
           })}
         </div>
       )}
+
+      <BulkImportModal
+        isOpen={importModalOpen}
+        onClose={() => setImportModalOpen(false)}
+        onImportComplete={loadPortfolio}
+      />
+      
+      <ShareModal 
+        isOpen={shareModalOpen}
+        onClose={() => setShareModalOpen(false)}
+      />
     </div>
   );
 };

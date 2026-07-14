@@ -57,6 +57,18 @@ export const AuthProvider = ({ children }) => {
   const signup = async (email, password, displayName) => {
     const cred = await createUserWithEmailAndPassword(auth, email, password);
     await updateProfile(cred.user, { displayName });
+    
+    // Automatically attempt to claim any guest purchases made with this email
+    try {
+      const idToken = await cred.user.getIdToken();
+      await fetch('/api/claim-purchase', {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${idToken}` }
+      });
+    } catch (e) {
+      console.error('Failed to claim guest purchase:', e);
+    }
+
     setUser({
       uid: cred.user.uid,
       email: cred.user.email,
@@ -67,6 +79,18 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     const cred = await signInWithEmailAndPassword(auth, email, password);
+    
+    // Check for unclaimed purchases
+    try {
+      const idToken = await cred.user.getIdToken();
+      await fetch('/api/claim-purchase', {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${idToken}` }
+      });
+    } catch (e) {
+      console.error('Failed to claim guest purchase:', e);
+    }
+    
     return cred.user;
   };
 

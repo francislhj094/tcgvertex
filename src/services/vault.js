@@ -1,6 +1,6 @@
 // Vault Storage Service — Firestore when logged in, localStorage as fallback
 import { db } from './firebase';
-import { doc, getDoc, setDoc, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
+import { doc, getDoc, setDoc, updateDoc, arrayUnion, arrayRemove, collection, query, where, getDocs } from 'firebase/firestore';
 
 const VAULT_KEY = 'tcg_vault_cards';
 
@@ -39,6 +39,34 @@ export const getVault = async (uid) => {
     return await getFirestoreVault(uid);
   }
   return getLocalVault();
+};
+
+export const setVaultPublicStatus = async (uid, isPublic, username) => {
+  if (!uid) return;
+  const ref = getUserDocRef(uid);
+  try {
+    const snap = await getDoc(ref);
+    if (snap.exists()) {
+      await updateDoc(ref, { isPublicVault: isPublic, username });
+    } else {
+      await setDoc(ref, { isPublicVault: isPublic, username, vault: [] });
+    }
+  } catch (err) {
+    console.error('Error setting public status:', err);
+  }
+};
+
+export const getPublicVaultByUsername = async (username) => {
+  try {
+    const usersRef = collection(db, 'users');
+    const q = query(usersRef, where('username', '==', username), where('isPublicVault', '==', true));
+    const snapshot = await getDocs(q);
+    if (snapshot.empty) return null;
+    return snapshot.docs[0].data();
+  } catch (err) {
+    console.error('Error fetching public vault:', err);
+    return null;
+  }
 };
 
 export const addToVault = async (cardId, uid, isPremium = false) => {

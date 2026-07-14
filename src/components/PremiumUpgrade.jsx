@@ -13,11 +13,6 @@ const PremiumUpgrade = () => {
   const { country } = useCountry();
 
   const handleUpgrade = async () => {
-    if (!user) {
-      addToast('Please log in first to upgrade', 'warning');
-      return;
-    }
-
     setLoading(true);
 
     // Track that user initiated checkout (Facebook Pixel)
@@ -33,8 +28,8 @@ const PremiumUpgrade = () => {
         },
         body: JSON.stringify({
           priceId: STRIPE_PRICE_ID,
-          userId: user.uid,
-          userEmail: user.email,
+          userId: user ? user.uid : 'guest',
+          userEmail: user ? user.email : undefined,
         }),
       });
 

@@ -20,13 +20,19 @@ import AboutPage from './pages/AboutPage';
 import ContactPage from './pages/ContactPage';
 import LPFreeTracker from './pages/LPFreeTracker';
 import LPPriceAlerts from './pages/LPPriceAlerts';
+import DeveloperDashboard from './pages/DeveloperDashboard';
+import PublicProfile from './pages/PublicProfile';
+import MarketMovers from './pages/MarketMovers';
+import LPChecklist from './pages/LPChecklist';
 
 // Landing pages that should render WITHOUT Navbar/Footer
-const LP_ROUTES = ['/lp/free-tracker', '/lp/price-alerts'];
+const LP_ROUTES = ['/lp/free-tracker', '/lp/price-alerts', '/lp/checklist'];
 
 const AppLayout = () => {
   const location = useLocation();
-  const isLandingPage = LP_ROUTES.includes(location.pathname);
+  // Strip trailing slash for checking LP_ROUTES (except for root '/')
+  const cleanPath = location.pathname.replace(/\/$/, '') || '/';
+  const isLandingPage = LP_ROUTES.includes(cleanPath);
 
   if (isLandingPage) {
     // Standalone landing pages — no nav, no footer
@@ -34,6 +40,7 @@ const AppLayout = () => {
       <Routes>
         <Route path="/lp/free-tracker" element={<LPFreeTracker />} />
         <Route path="/lp/price-alerts" element={<LPPriceAlerts />} />
+        <Route path="/lp/checklist" element={<LPChecklist />} />
       </Routes>
     );
   }
@@ -53,8 +60,11 @@ const AppLayout = () => {
           <Route path="/terms" element={<TermsOfService />} />
           <Route path="/premium" element={<PremiumPage />} />
           <Route path="/alerts" element={<AlertsPage />} />
+          <Route path="/movers" element={<MarketMovers />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/contact" element={<ContactPage />} />
+          <Route path="/developer" element={<DeveloperDashboard />} />
+          <Route path="/u/:username" element={<PublicProfile />} />
         </Routes>
       </main>
       <Footer />

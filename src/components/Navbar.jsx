@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { ChartLineUp, IdentificationCard, List, X, GridFour, Wallet, SignOut, UserCircle } from 'phosphor-react';
+import { ChartLineUp, IdentificationCard, List, X, GridFour, Wallet, SignOut, UserCircle, Code, Fire } from 'phosphor-react';
 import AuthModal from './AuthModal';
 import UpgradeModal from './UpgradeModal';
 import CountrySelector from './CountrySelector';
@@ -67,11 +67,17 @@ const Navbar = () => {
             <Link to="/market" className="flex-center" style={linkStyle('/market')}>
               <ChartLineUp size={20} /> {t('nav.market')}
             </Link>
+            <Link to="/movers" className="flex-center" style={linkStyle('/movers')}>
+              <Fire size={20} /> Movers
+            </Link>
             <Link to="/sets" className="flex-center" style={linkStyle('/sets')}>
               <GridFour size={20} /> Sets
             </Link>
             <Link to="/portfolio" className="flex-center" style={linkStyle('/portfolio')}>
               <Wallet size={20} /> {t('nav.portfolio')}
+            </Link>
+            <Link to="/developer" className="flex-center" style={linkStyle('/developer')}>
+              <Code size={20} /> API
             </Link>
           </div>
 
@@ -130,11 +136,17 @@ const Navbar = () => {
         <Link to="/market" onClick={() => setMenuOpen(false)}>
           <ChartLineUp size={20} /> {t('nav.market')}
         </Link>
+        <Link to="/movers" onClick={() => setMenuOpen(false)}>
+          <Fire size={20} /> Movers
+        </Link>
         <Link to="/sets" onClick={() => setMenuOpen(false)}>
           <GridFour size={20} /> Sets
         </Link>
         <Link to="/portfolio" onClick={() => setMenuOpen(false)}>
           <Wallet size={20} /> {t('nav.portfolio')}
+        </Link>
+        <Link to="/developer" onClick={() => setMenuOpen(false)}>
+          <Code size={20} /> Developer API
         </Link>
 
         <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '8px', paddingTop: '16px', borderTop: '1px solid var(--border-warm)' }}>
