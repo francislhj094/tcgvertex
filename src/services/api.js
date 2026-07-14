@@ -45,8 +45,14 @@ export const searchCards = async (query = '', page = 1) => {
   try {
     let qParam = '';
     if (query) {
-      // Prefix match on name for significantly faster query performance
-      qParam = `q=name:"${query}*"`;
+      let formattedQuery = query.trim();
+      if (formattedQuery.includes(' ')) {
+        // For queries with spaces, use exact phrase match without wildcard (much faster)
+        qParam = `q=name:"${formattedQuery}"`;
+      } else {
+        // For single word queries, use prefix match without quotes (fastest)
+        qParam = `q=name:${formattedQuery}*`;
+      }
     } else {
       // If no query, just fetch some high value cards
       qParam = `q=supertype:Pokémon`;
