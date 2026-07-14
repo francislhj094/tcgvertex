@@ -76,7 +76,7 @@ const PremiumUpgrade = () => {
     }}>
       <div style={{
         position: 'absolute',
-        top: '-16px',
+        top: '-18px',
         left: '50%',
         transform: 'translateX(-50%)',
         background: '#111827',
@@ -90,7 +90,8 @@ const PremiumUpgrade = () => {
         display: 'flex',
         alignItems: 'center',
         gap: '6px',
-        textTransform: 'uppercase'
+        textTransform: 'uppercase',
+        zIndex: 20
       }}>
         <Sparkle size={16} weight="fill" color="#F59E0B" /> Lifetime Access
       </div>
