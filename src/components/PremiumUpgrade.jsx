@@ -39,14 +39,10 @@ const PremiumUpgrade = () => {
         throw new Error(data.error || 'Failed to create checkout session');
       }
 
-      // Redirect to Stripe Checkout
-      const stripe = await getStripe();
-      const { error } = await stripe.redirectToCheckout({
-        sessionId: data.sessionId,
-      });
-
-      if (error) {
-        throw error;
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        throw new Error('Checkout URL missing from response');
       }
 
     } catch (error) {
