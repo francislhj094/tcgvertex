@@ -58,10 +58,8 @@ export const searchCards = async (query = '', page = 1) => {
       qParam = `q=supertype:Pokémon`;
     }
     
-    // orderBy is removed because sorting by tcgplayer prices causes a full table scan on the backend, 
-    // taking 10-15 seconds for some queries. 
-    // select is added to reduce payload size and parsing time.
-    const response = await fetch(`${BASE_URL}/cards?${qParam}&pageSize=12&select=id,name,images,set,rarity,tcgplayer,cardmarket&page=${page}`);
+    // orderBy=-set.releaseDate is used because it's usually faster than sorting by price on the Pokemon API
+    const response = await fetch(`${BASE_URL}/cards?${qParam}&orderBy=-set.releaseDate&pageSize=12&select=id,name,images,set,rarity,tcgplayer,cardmarket&page=${page}`);
     const data = await response.json();
     return data.data;
   } catch (error) {
