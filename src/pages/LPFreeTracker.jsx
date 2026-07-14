@@ -291,7 +291,7 @@ const LPFreeTracker = () => {
         </div>
       </div>
 
-      <AuthModal isOpen={authOpen} onClose={() => setAuthOpen(false)} />
+      <AuthModal isOpen={authOpen} onClose={() => setAuthOpen(false)} initialMode="signup" />
 
 
     </>
