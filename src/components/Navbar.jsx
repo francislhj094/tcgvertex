@@ -91,33 +91,6 @@ const Navbar = () => {
                 {t('nav.login')}
               </button>
             )}
-            <Link to="/premium" style={{ 
-              padding: '8px 20px', 
-              whiteSpace: 'nowrap', 
-              flexShrink: 0,
-              background: 'linear-gradient(135deg, #FF6B6B 0%, #D93838 100%)',
-              color: 'white',
-              borderRadius: '99px',
-              fontWeight: 600,
-              textDecoration: 'none',
-              boxShadow: '0 4px 14px rgba(217, 56, 56, 0.4)',
-              transition: 'all 0.3s ease',
-              border: 'none',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px'
-            }}
-            onMouseOver={e => {
-              e.currentTarget.style.transform = 'translateY(-2px)';
-              e.currentTarget.style.boxShadow = '0 6px 20px rgba(217, 56, 56, 0.6)';
-            }}
-            onMouseOut={e => {
-              e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.boxShadow = '0 4px 14px rgba(217, 56, 56, 0.4)';
-            }}>
-              <Sparkle size={18} weight="fill" />
-              {t('nav.premium')}
-            </Link>
           </div>
 
           <button className="mobile-menu-btn" onClick={() => setMenuOpen(true)}>
@@ -176,9 +149,6 @@ const Navbar = () => {
               {t('nav.login')}
             </button>
           )}
-          <button className="btn-primary" style={{ justifyContent: 'center' }} onClick={() => { setMenuOpen(false); setUpgradeModalOpen(true); }}>
-            {t('nav.premium')}
-          </button>
         </div>
       </div>
 

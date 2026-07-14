@@ -41,8 +41,7 @@ const CountrySelector = () => {
         }}
       >
         <Globe size={18} weight="bold" />
-        <span style={{ fontSize: '1.1rem' }}>{country.flag}</span>
-        <span>{country.code}</span>
+        <span style={{ fontWeight: 600, fontSize: '0.95rem' }}>{country.code}</span>
       </button>
 
       {isOpen && (
