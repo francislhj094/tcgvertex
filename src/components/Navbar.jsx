@@ -63,7 +63,7 @@ const Navbar = () => {
             </h2>
           </div>
 
-          <div className="nav-links flex-center" style={{ gap: '32px', fontWeight: 500 }}>
+          <div className="nav-links flex-center" style={{ gap: '24px', fontWeight: 500, flexShrink: 0 }}>
             <Link to="/market" className="flex-center" style={linkStyle('/market')}>
               <ChartLineUp size={20} /> {t('nav.market')}
             </Link>
@@ -81,24 +81,24 @@ const Navbar = () => {
             </Link>
           </div>
 
-          <div className="nav-actions flex-center" style={{ gap: '16px' }}>
+          <div className="nav-actions flex-center" style={{ gap: '12px', flexShrink: 0 }}>
             <CountrySelector />
             {user ? (
               <>
-                <div className="flex-center" style={{ gap: '8px', color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
+                <div className="flex-center" style={{ gap: '6px', color: 'var(--text-secondary)', fontSize: '0.9rem', flexShrink: 0 }}>
                   <UserCircle size={22} weight="fill" color="var(--accent-terracotta)" />
-                  <span style={{ fontWeight: 500 }}>{user.name}</span>
+                  <span style={{ fontWeight: 500, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '120px' }}>{user.name}</span>
                 </div>
-                <button className="btn-outline" style={{ padding: '10px 20px' }} onClick={handleLogout}>
+                <button className="btn-outline" style={{ padding: '8px 16px', whiteSpace: 'nowrap', flexShrink: 0 }} onClick={handleLogout}>
                   <SignOut size={16} weight="bold" /> {t('nav.logout')}
                 </button>
               </>
             ) : (
-              <button className="btn-outline" style={{ padding: '10px 20px' }} onClick={() => setAuthModalOpen(true)}>
+              <button className="btn-outline" style={{ padding: '8px 16px', whiteSpace: 'nowrap', flexShrink: 0 }} onClick={() => setAuthModalOpen(true)}>
                 {t('nav.login')}
               </button>
             )}
-            <Link to="/premium" className="btn-primary" style={{ padding: '10px 20px' }}>
+            <Link to="/premium" className="btn-primary" style={{ padding: '8px 16px', whiteSpace: 'nowrap', flexShrink: 0 }}>
               {t('nav.premium')}
             </Link>
           </div>

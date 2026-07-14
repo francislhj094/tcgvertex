@@ -27,7 +27,9 @@ const CountrySelector = () => {
           transition: 'all 0.2s',
           fontSize: '0.95rem',
           fontWeight: 500,
-          color: 'var(--text-primary)'
+          color: 'var(--text-primary)',
+          flexShrink: 0,
+          whiteSpace: 'nowrap'
         }}
         onMouseOver={e => {
           e.currentTarget.style.borderColor = 'var(--accent-terracotta)';
