@@ -1,13 +1,54 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { TrendUp, TrendDown, Trophy, ArrowDown } from 'phosphor-react';
-import { getTopPerformers, getBottomPerformers } from '../services/portfolioAnalytics';
+import { calculateRealPortfolioMetrics } from '../services/firestoreHistory';
 
 const PerformanceCards = ({ cards, days = 30 }) => {
-  if (!cards || cards.length === 0) return null;
+  const [topPerformers, setTopPerformers] = useState([]);
+  const [bottomPerformers, setBottomPerformers] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const topPerformers = getTopPerformers(cards, 3, days);
-  const bottomPerformers = getBottomPerformers(cards, 3, days);
+  useEffect(() => {
+    let isMounted = true;
+    const loadPerformance = async () => {
+      if (!cards || cards.length === 0) return;
+      setLoading(true);
+      try {
+        const metrics = await calculateRealPortfolioMetrics(cards, days);
+        if (isMounted) {
+          const sorted = [...metrics.performances];
+          
+          // Top performers (descending by gainPercent)
+          const top = [...sorted].sort((a, b) => b.gainPercent - a.gainPercent).slice(0, 3);
+          // Bottom performers (ascending by gainPercent)
+          const bottom = [...sorted].sort((a, b) => a.gainPercent - b.gainPercent).slice(0, 3);
+          
+          setTopPerformers(top);
+          setBottomPerformers(bottom);
+          setLoading(false);
+        }
+      } catch (error) {
+        console.error('Error loading card performance:', error);
+        if (isMounted) setLoading(false);
+      }
+    };
+    
+    loadPerformance();
+    return () => {
+      isMounted = false;
+    };
+  }, [cards, days]);
+
+  if (!cards || cards.length === 0) return null;
+  
+  if (loading) {
+    return (
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '32px' }}>
+        <div className="skeleton" style={{ height: '240px', borderRadius: 'var(--radius-lg)' }} />
+        <div className="skeleton" style={{ height: '240px', borderRadius: 'var(--radius-lg)' }} />
+      </div>
+    );
+  }
 
   const PerformerCard = ({ performer, rank, isTop }) => (
     <Link

@@ -32,7 +32,7 @@ const SetDetailPage = () => {
   return (
     <div className="container" style={{ padding: '40px 24px' }}>
       <Helmet>
-        <title>{`${setName} — All Cards & Prices | TCG Vault`}</title>
+        <title>{`${setName} — Cards List & Prices | PokéPrice Tracker`}</title>
         <meta name="description" content={`Browse all cards in the ${setName} Pokémon TCG set. View real-time prices and market data.`} />
       </Helmet>
 

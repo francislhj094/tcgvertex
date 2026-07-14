@@ -23,7 +23,7 @@ const SetsPage = () => {
   return (
     <div className="container" style={{ padding: '40px 24px' }}>
       <Helmet>
-        <title>Browse All Pokémon TCG Sets | TCG Vault</title>
+        <title>Browse All Pokémon TCG Sets | PokéPrice Tracker</title>
         <meta name="description" content="Browse every Pokémon TCG expansion set. View card lists, prices, and market data for Scarlet & Violet, Sword & Shield, and more." />
       </Helmet>
 

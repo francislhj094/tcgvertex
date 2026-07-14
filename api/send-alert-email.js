@@ -396,7 +396,7 @@ export default async function handler(req, res) {
 
     // Send email via Resend
     const emailResult = await resend.emails.send({
-      from: 'PokéPrice Alerts <alerts@pokeprice.app>',
+      from: process.env.RESEND_FROM_EMAIL || 'PokéPrice Alerts <alerts@tcgvertex.com>',
       to: userEmail,
       subject: `🔔 Price Alert: ${alertData.cardName} ${isPriceDrop ? '📉' : '📈'} $${Math.abs(alertData.priceChange).toFixed(2)}`,
       html: emailHtml,

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { TrendUp, TrendDown, ChartLine, Calendar } from 'phosphor-react';
-import { generatePortfolioHistory, getPortfolioMetrics } from '../services/portfolioAnalytics';
+import { fetchRealPortfolioHistory, calculateRealPortfolioMetrics } from '../services/firestoreHistory';
 import { filterHistoryByRange, formatDate, formatDateLong } from '../services/priceHistory';
 
 const PortfolioValueChart = ({ cards }) => {
@@ -19,31 +19,47 @@ const PortfolioValueChart = ({ cards }) => {
   ];
 
   useEffect(() => {
-    if (cards && cards.length > 0) {
+    let isMounted = true;
+
+    const loadRealData = async () => {
+      if (!cards || cards.length === 0) return;
       setLoading(true);
 
-      setTimeout(() => {
-        const portfolioHistory = generatePortfolioHistory(cards, 180);
-        setHistory(portfolioHistory);
-        setFilteredHistory(filterHistoryByRange(portfolioHistory, selectedRange));
+      try {
+        let portfolioHistory = await fetchRealPortfolioHistory(cards);
+
+        // Flatline duplication fallback if only 1 data point is present
+        if (portfolioHistory.length === 1) {
+          const singlePt = portfolioHistory[0];
+          const prevDate = new Date(singlePt.timestamp - 24 * 60 * 60 * 1000);
+          const prevDateStr = prevDate.toISOString().split('T')[0];
+          portfolioHistory = [
+            { date: prevDateStr, value: singlePt.value, timestamp: prevDate.getTime() },
+            singlePt
+          ];
+        }
 
         const days = selectedRange === '7d' ? 7 : selectedRange === '30d' ? 30 : selectedRange === '90d' ? 90 : 180;
-        const portfolioMetrics = getPortfolioMetrics(cards, days);
-        setMetrics(portfolioMetrics);
+        const portfolioMetrics = await calculateRealPortfolioMetrics(cards, days);
 
-        setLoading(false);
-      }, 500);
-    }
-  }, [cards]);
+        if (isMounted) {
+          setHistory(portfolioHistory);
+          setFilteredHistory(filterHistoryByRange(portfolioHistory, selectedRange));
+          setMetrics(portfolioMetrics);
+          setLoading(false);
+        }
+      } catch (error) {
+        console.error('Error loading portfolio chart data:', error);
+        if (isMounted) setLoading(false);
+      }
+    };
 
-  useEffect(() => {
-    const filtered = filterHistoryByRange(history, selectedRange);
-    setFilteredHistory(filtered);
+    loadRealData();
 
-    const days = selectedRange === '7d' ? 7 : selectedRange === '30d' ? 30 : selectedRange === '90d' ? 90 : 180;
-    const portfolioMetrics = getPortfolioMetrics(cards, days);
-    setMetrics(portfolioMetrics);
-  }, [selectedRange, history, cards]);
+    return () => {
+      isMounted = false;
+    };
+  }, [cards, selectedRange]);
 
   const CustomTooltip = ({ active, payload }) => {
     if (active && payload && payload.length) {

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { TrendUp, ArrowRight, CheckCircle, MagnifyingGlass, Sparkle, Lightning, Bell } from 'phosphor-react';
 import CardDisplay from '../components/CardDisplay';
 import CardSkeleton from '../components/CardSkeleton';
@@ -25,6 +26,12 @@ const LandingPage = () => {
 
   return (
     <div style={{ background: 'var(--bg-primary)' }}>
+      <Helmet>
+        <title>PokéPrice Tracker | Real-Time Pokémon TCG Card Prices</title>
+        <meta name="description" content="Track Pokémon TCG card prices in real-time. View pricing data, watchlist cards, and get instant price drop alerts." />
+        <meta property="og:title" content="PokéPrice Tracker | Real-Time Pokémon TCG Card Prices" />
+        <meta property="og:description" content="Track Pokémon TCG card prices in real-time. View pricing data, watchlist cards, and get instant price drop alerts." />
+      </Helmet>
       {/* Premium Hero Section */}
       <section className="hero-section" style={{
         background: 'linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-primary) 100%)',

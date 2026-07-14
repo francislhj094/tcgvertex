@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import CardDisplay from '../components/CardDisplay';
+import { Helmet } from 'react-helmet-async';
 import CardSkeleton from '../components/CardSkeleton';
 import { MagnifyingGlass, Funnel, Star, Coins, SlidersHorizontal, Lightning } from 'phosphor-react';
 import { searchCards, buildAffiliateLink } from '../services/api';
@@ -115,6 +116,12 @@ const MarketDashboard = () => {
       gap: '48px',
       alignItems: 'flex-start'
     }}>
+      <Helmet>
+        <title>Browse Pokémon Card Prices & Market Values | PokéPrice Tracker</title>
+        <meta name="description" content="Search and filter the Pokémon card database. View live TCGPlayer prices, card rarity, and filter by set or condition." />
+        <meta property="og:title" content="Browse Pokémon Card Prices & Market Values | PokéPrice Tracker" />
+        <meta property="og:description" content="Search and filter the Pokémon card database. View live TCGPlayer prices, card rarity, and filter by set or condition." />
+      </Helmet>
       {/* Premium Sidebar */}
       <aside className="market-sidebar" style={{
         width: '300px',

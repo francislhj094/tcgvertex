@@ -19,18 +19,10 @@ export const buildAffiliateLink = (rawUrl) => {
   }
 
   try {
-    // Parse the URL and add affiliate parameters
-    const url = new URL(rawUrl);
-
-    // TCGPlayer affiliate tracking parameters
-    url.searchParams.set('partner', AFFILIATE_ID);
-    url.searchParams.set('utm_campaign', 'affiliate');
-    url.searchParams.set('utm_source', 'pokeprice_tracker');
-    url.searchParams.set('utm_medium', 'price_tracker');
-
-    return url.toString();
+    // Modern Impact.com affiliate link wrapping format
+    // TCGPlayer program campaign ID is 21018, default link ID is 1780961
+    return `https://partner.tcgplayer.com/c/${AFFILIATE_ID}/1780961/21018?u=${encodeURIComponent(rawUrl)}`;
   } catch (error) {
-    // If URL parsing fails, return original URL
     console.error('Error building affiliate link:', error);
     return rawUrl;
   }

@@ -36,7 +36,7 @@ export default async function handler(req, res) {
 
     // Send email via Resend
     const emailResult = await resend.emails.send({
-      from: 'PokéPrice Support <support@pokeprice.app>',
+      from: process.env.RESEND_FROM_EMAIL_SUPPORT || 'PokéPrice Support <support@tcgvertex.com>',
       to: process.env.SUPPORT_EMAIL || 'support@yourdomain.com',
       replyTo: email,
       subject: `Contact Form: ${name}`,
