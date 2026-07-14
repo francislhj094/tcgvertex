@@ -695,6 +695,7 @@ const LandingPage = () => {
           </div>
         </div>
       </section>
+      <AuthModal isOpen={authModalOpen} onClose={() => setAuthModalOpen(false)} />
     </div>
   );
 };
