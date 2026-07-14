@@ -7,12 +7,46 @@ import CardSkeleton from '../components/CardSkeleton';
 import { fetchTrendingCards, buildAffiliateLink } from '../services/api';
 import { useTranslation } from '../translations/useTranslation';
 import { useCountry } from '../context/CountryContext';
+import AuthModal from '../components/AuthModal';
+import { useAuth } from '../context/AuthContext';
+import { useToast } from '../context/ToastContext';
+import { STRIPE_PRICE_ID } from '../services/stripe';
+import { trackInitiateCheckout } from '../services/facebookPixel';
 
 const LandingPage = () => {
   const [trendingCards, setTrendingCards] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [authModalOpen, setAuthModalOpen] = useState(false);
+  const [loadingCheckout, setLoadingCheckout] = useState(false);
   const { t } = useTranslation();
-  const { formatPrice } = useCountry();
+  const { country, formatPrice } = useCountry();
+  const { user } = useAuth();
+  const { addToast } = useToast();
+
+  const handleStripeCheckout = async (e) => {
+    e.preventDefault();
+    setLoadingCheckout(true);
+    const priceInLocalCurrency = 9.99 * country.priceMultiplier;
+    trackInitiateCheckout('Premium Lifetime Access (Homepage)', priceInLocalCurrency, country.currency);
+    try {
+      const response = await fetch('/api/create-checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          priceId: STRIPE_PRICE_ID,
+          userId: user ? user.uid : 'guest',
+          userEmail: user ? user.email : undefined,
+        }),
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error);
+      if (data.url) window.location.href = data.url;
+    } catch (error) {
+      console.error(error);
+      addToast('Failed to start checkout. Please try again.', 'warning');
+      setLoadingCheckout(false);
+    }
+  };
 
   useEffect(() => {
     const loadCards = async () => {
@@ -109,13 +143,15 @@ const LandingPage = () => {
           </p>
 
           <div className="hero-actions" style={{ display: 'flex', justifyContent: 'center', gap: '20px', flexWrap: 'wrap', marginBottom: '64px' }}>
-            <Link to="/market" className="btn-primary" style={{
+            <button onClick={() => setAuthModalOpen(true)} className="btn-primary" style={{
               fontSize: '1.15rem',
               padding: '18px 36px',
-              boxShadow: '0 4px 16px rgba(196, 97, 47, 0.25)'
+              boxShadow: '0 4px 16px rgba(196, 97, 47, 0.25)',
+              border: 'none',
+              cursor: 'pointer'
             }}>
               {t('home.hero.ctaPrimary')} <ArrowRight weight="bold" size={20} />
-            </Link>
+            </button>
             <a href="#pricing" className="btn-outline" style={{
               fontSize: '1.15rem',
               padding: '18px 36px'
@@ -491,13 +527,17 @@ const LandingPage = () => {
                 </li>
               ))}
             </ul>
-            <Link to="/market" className="btn-outline" style={{
+            <button onClick={() => setAuthModalOpen(true)} className="btn-outline" style={{
               width: '100%',
               justifyContent: 'center',
-              padding: '16px'
+              padding: '16px',
+              border: '1.5px solid var(--border-warm)',
+              background: 'transparent',
+              color: 'var(--text-primary)',
+              cursor: 'pointer'
             }}>
               {t('home.pricing.free.cta')}
-            </Link>
+            </button>
           </div>
 
           {/* Premium Tier */}
@@ -573,15 +613,18 @@ const LandingPage = () => {
                 </li>
               ))}
             </ul>
-            <Link to="/premium" className="btn-primary" style={{
+            <button onClick={handleStripeCheckout} disabled={loadingCheckout} className="btn-primary" style={{
               width: '100%',
               justifyContent: 'center',
               padding: '16px',
               fontSize: '1.05rem',
-              boxShadow: '0 4px 16px rgba(196, 97, 47, 0.3)'
+              boxShadow: '0 4px 16px rgba(196, 97, 47, 0.3)',
+              border: 'none',
+              cursor: loadingCheckout ? 'not-allowed' : 'pointer',
+              opacity: loadingCheckout ? 0.7 : 1
             }}>
-              {t('home.pricing.premium.cta')}
-            </Link>
+              {loadingCheckout ? 'Processing...' : t('home.pricing.premium.cta')}
+            </button>
             <p style={{
               textAlign: 'center',
               fontSize: '0.85rem',
@@ -638,9 +681,9 @@ const LandingPage = () => {
             {t('home.cta.subtitle')}
           </p>
           <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <Link to="/market" className="btn-primary" style={{ fontSize: '1.15rem', padding: '18px 36px' }}>
+            <button onClick={() => setAuthModalOpen(true)} className="btn-primary" style={{ fontSize: '1.15rem', padding: '18px 36px', border: 'none', cursor: 'pointer' }}>
               {t('home.cta.startFree')} <ArrowRight weight="bold" size={20} />
-            </Link>
+            </button>
             <a href="#pricing" className="btn-outline" style={{
               fontSize: '1.15rem',
               padding: '18px 36px',
