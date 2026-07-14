@@ -208,7 +208,6 @@ const LPChecklist = () => {
             0 1px 3px rgba(0,0,0,0.05),
             0 10px 40px -10px rgba(60, 55, 45, 0.12),
             0 20px 60px -20px rgba(60, 55, 45, 0.18);
-          overflow: hidden;
           padding: 48px 40px 40px 64px;
           font-family: var(--font-body);
           max-width: 680px;
@@ -217,6 +216,7 @@ const LPChecklist = () => {
           box-sizing: border-box;
           transform-origin: top center;
           animation: paperSlideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+          z-index: 5;
         }
 
         @keyframes paperSlideUp {
