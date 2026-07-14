@@ -53,130 +53,161 @@ const PremiumUpgrade = () => {
   };
 
   return (
-    <div className="glass-panel" style={{
-      padding: '48px',
-      maxWidth: '500px',
-      margin: '0 auto',
-      background: 'linear-gradient(135deg, var(--bg-white) 0%, var(--bg-secondary) 100%)',
-      border: '2px solid var(--accent-terracotta)',
-      boxShadow: '0 12px 40px rgba(196, 97, 47, 0.2)',
-      position: 'relative'
+    <div style={{
+      flex: '1.2',
+      minWidth: '340px',
+      maxWidth: '440px',
+      padding: '4px',
+      background: 'linear-gradient(135deg, #FF6B6B 0%, #D93838 100%)',
+      borderRadius: '28px',
+      boxShadow: '0 24px 64px rgba(217, 56, 56, 0.25)',
+      position: 'relative',
+      transform: 'scale(1.05)',
+      zIndex: 10,
+      transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+    }}
+    onMouseOver={e => {
+      e.currentTarget.style.transform = 'scale(1.08)';
+      e.currentTarget.style.boxShadow = '0 32px 80px rgba(217, 56, 56, 0.35)';
+    }}
+    onMouseOut={e => {
+      e.currentTarget.style.transform = 'scale(1.05)';
+      e.currentTarget.style.boxShadow = '0 24px 64px rgba(217, 56, 56, 0.25)';
     }}>
       <div style={{
         position: 'absolute',
         top: '-16px',
         left: '50%',
         transform: 'translateX(-50%)',
-        background: 'var(--accent-terracotta)',
-        color: 'white',
+        background: '#111827',
+        color: '#FDE68A',
         padding: '8px 24px',
-        borderRadius: 'var(--radius-pill)',
+        borderRadius: '99px',
         fontSize: '0.9rem',
-        fontWeight: 600,
-        letterSpacing: '0.03em',
-        boxShadow: '0 4px 12px rgba(196, 97, 47, 0.3)',
+        fontWeight: 700,
+        letterSpacing: '0.05em',
+        boxShadow: '0 8px 24px rgba(0, 0, 0, 0.2)',
         display: 'flex',
         alignItems: 'center',
-        gap: '6px'
+        gap: '6px',
+        textTransform: 'uppercase'
       }}>
-        <Sparkle size={16} weight="fill" /> Lifetime Access
+        <Sparkle size={16} weight="fill" color="#F59E0B" /> Lifetime Access
       </div>
 
-      <div style={{ textAlign: 'center', marginBottom: '32px', marginTop: '16px' }}>
-        <div style={{
-          width: '80px',
-          height: '80px',
-          background: 'var(--accent-terracotta)',
-          borderRadius: '50%',
+      <div style={{
+        background: 'rgba(255, 255, 255, 0.95)',
+        backdropFilter: 'blur(20px)',
+        borderRadius: '24px',
+        padding: '44px 40px',
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column'
+      }}>
+        <div style={{ textAlign: 'center', marginBottom: '32px', marginTop: '12px' }}>
+          <h3 style={{ fontSize: '1.75rem', marginBottom: '8px', color: '#D93838', fontWeight: 700 }}>Premium</h3>
+          
+          <div style={{
+            fontSize: '4.5rem',
+            fontWeight: 700,
+            fontFamily: 'var(--font-heading)',
+            color: '#111827',
+            lineHeight: 1,
+            letterSpacing: '-0.04em',
+            marginBottom: '8px'
+          }}>
+            $9.99
+          </div>
+
+          <p style={{
+            color: '#6B7280',
+            fontSize: '1rem',
+            fontWeight: 600
+          }}>
+            One-time payment • No subscriptions
+          </p>
+        </div>
+
+        <ul style={{
+          listStyle: 'none',
+          padding: 0,
+          margin: '0 0 32px 0',
           display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          margin: '0 auto 24px',
-          boxShadow: '0 8px 24px rgba(196, 97, 47, 0.3)'
+          flexDirection: 'column',
+          gap: '18px',
+          flexGrow: 1
         }}>
-          <Lightning size={40} color="white" weight="fill" />
-        </div>
+          <li style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '1.05rem', color: '#1F2937', fontWeight: 500 }}>
+            <CheckCircle size={24} color="#D93838" weight="fill" />
+            <span><strong style={{ color: '#D93838' }}>Unlimited</strong> card tracking</span>
+          </li>
+          <li style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '1.05rem', color: '#1F2937', fontWeight: 500 }}>
+            <CheckCircle size={24} color="#D93838" weight="fill" />
+            <span><strong style={{ color: '#D93838' }}>Instant</strong> price drop alerts</span>
+          </li>
+          <li style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '1.05rem', color: '#1F2937', fontWeight: 500 }}>
+            <CheckCircle size={24} color="#D93838" weight="fill" />
+            <span>90-day price history charts</span>
+          </li>
+          <li style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '1.05rem', color: '#1F2937', fontWeight: 500 }}>
+            <CheckCircle size={24} color="#D93838" weight="fill" />
+            <span>Ad-free experience</span>
+          </li>
+          <li style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '1.05rem', color: '#1F2937', fontWeight: 500 }}>
+            <CheckCircle size={24} color="#D93838" weight="fill" />
+            <span>Priority support</span>
+          </li>
+        </ul>
 
-        <h2 style={{ fontSize: '2rem', marginBottom: '12px' }}>
-          Upgrade to <span className="text-accent">Premium</span>
-        </h2>
-
-        <div style={{
-          fontSize: '4rem',
-          fontWeight: 500,
-          fontFamily: 'var(--font-heading)',
-          color: 'var(--accent-terracotta)',
-          marginBottom: '8px',
-          letterSpacing: '-0.03em'
-        }}>
-          $9.99
-        </div>
+        <button
+          onClick={handleUpgrade}
+          disabled={loading}
+          style={{
+            width: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '8px',
+            padding: '18px',
+            fontSize: '1.15rem',
+            fontWeight: 700,
+            color: 'white',
+            background: 'linear-gradient(135deg, #FF6B6B 0%, #D93838 100%)',
+            border: 'none',
+            borderRadius: '16px',
+            boxShadow: '0 8px 24px rgba(217, 56, 56, 0.4)',
+            transition: 'all 0.3s ease',
+            cursor: loading ? 'not-allowed' : 'pointer',
+            opacity: loading ? 0.7 : 1,
+            transform: 'translateY(0)'
+          }}
+          onMouseOver={e => {
+            if(!loading) {
+              e.currentTarget.style.transform = 'translateY(-2px)';
+              e.currentTarget.style.boxShadow = '0 12px 32px rgba(217, 56, 56, 0.5)';
+            }
+          }}
+          onMouseOut={e => {
+            if(!loading) {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0 8px 24px rgba(217, 56, 56, 0.4)';
+            }
+          }}
+        >
+          <Lightning size={22} weight="fill" />
+          {loading ? 'Processing...' : 'Upgrade Now'}
+        </button>
 
         <p style={{
-          color: 'var(--text-secondary)',
-          fontSize: '1.05rem',
+          textAlign: 'center',
+          fontSize: '0.85rem',
+          color: '#9CA3AF',
+          marginTop: '16px',
           fontWeight: 500
         }}>
-          One-time payment • Lifetime access
+          Secure payment powered by Stripe
         </p>
       </div>
-
-      <ul style={{
-        listStyle: 'none',
-        padding: 0,
-        margin: '0 0 32px 0',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '16px'
-      }}>
-        <li style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '1.05rem' }}>
-          <CheckCircle size={24} color="var(--accent-terracotta)" weight="fill" />
-          <strong>Unlimited</strong> card tracking
-        </li>
-        <li style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '1.05rem' }}>
-          <CheckCircle size={24} color="var(--accent-terracotta)" weight="fill" />
-          <strong>Instant</strong> price drop alerts
-        </li>
-        <li style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '1.05rem' }}>
-          <CheckCircle size={24} color="var(--accent-terracotta)" weight="fill" />
-          90-day price history charts
-        </li>
-        <li style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '1.05rem' }}>
-          <CheckCircle size={24} color="var(--accent-terracotta)" weight="fill" />
-          Ad-free experience
-        </li>
-        <li style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '1.05rem' }}>
-          <CheckCircle size={24} color="var(--accent-terracotta)" weight="fill" />
-          Priority support
-        </li>
-      </ul>
-
-      <button
-        className="btn-primary"
-        onClick={handleUpgrade}
-        disabled={loading}
-        style={{
-          width: '100%',
-          justifyContent: 'center',
-          padding: '18px',
-          fontSize: '1.1rem',
-          boxShadow: '0 4px 16px rgba(196, 97, 47, 0.3)',
-          opacity: loading ? 0.7 : 1,
-          cursor: loading ? 'not-allowed' : 'pointer'
-        }}
-      >
-        {loading ? 'Processing...' : 'Upgrade Now - $9.99'}
-      </button>
-
-      <p style={{
-        textAlign: 'center',
-        fontSize: '0.85rem',
-        color: 'var(--text-muted)',
-        marginTop: '16px',
-        lineHeight: 1.6
-      }}>
-        Secure payment powered by Stripe • Instant activation
-      </p>
     </div>
   );
 };

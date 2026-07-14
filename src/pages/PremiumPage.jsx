@@ -231,11 +231,39 @@ const PremiumPage = () => {
   }
 
   return (
-    <div className="container" style={{ padding: '60px 24px', maxWidth: '1200px' }}>
+    <div className="container" style={{ padding: '60px 24px', maxWidth: '1000px', position: 'relative' }}>
       <Helmet>
         <title>Upgrade to Premium | PokéPrice Tracker</title>
         <meta name="description" content="Unlock unlimited card tracking, price alerts, and premium features for just $9.99 one-time payment." />
       </Helmet>
+
+      {/* Decorative background glows */}
+      <div style={{
+        position: 'absolute',
+        top: '10%',
+        left: '20%',
+        width: '400px',
+        height: '400px',
+        background: 'var(--accent-terracotta)',
+        opacity: 0.08,
+        filter: 'blur(120px)',
+        borderRadius: '50%',
+        zIndex: -1,
+        pointerEvents: 'none'
+      }} />
+      <div style={{
+        position: 'absolute',
+        bottom: '10%',
+        right: '15%',
+        width: '350px',
+        height: '350px',
+        background: 'var(--accent-terracotta)',
+        opacity: 0.1,
+        filter: 'blur(100px)',
+        borderRadius: '50%',
+        zIndex: -1,
+        pointerEvents: 'none'
+      }} />
 
       <Link to="/" style={{
         display: 'inline-flex',
@@ -253,31 +281,57 @@ const PremiumPage = () => {
       </Link>
 
       <div style={{ textAlign: 'center', marginBottom: '60px' }}>
-        <h1 style={{ fontSize: '3rem', marginBottom: '16px' }}>
-          Upgrade to <span className="text-accent">Premium</span>
+        <h1 style={{ fontSize: '3.5rem', marginBottom: '16px', letterSpacing: '-0.03em' }}>
+          Upgrade to <span style={{ 
+            background: 'linear-gradient(135deg, #FF6B6B 0%, #D93838 100%)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            display: 'inline-block'
+          }}>Premium</span>
         </h1>
-        <p style={{ color: 'var(--text-secondary)', fontSize: '1.2rem' }}>
+        <p style={{ color: 'var(--text-secondary)', fontSize: '1.25rem', fontWeight: 500 }}>
           One-time payment. Lifetime access. No monthly fees.
         </p>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '60px', marginBottom: '60px' }}>
-        {/* Free Plan */}
-        <div className="glass-panel" style={{
-          padding: '40px',
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        gap: '30px', 
+        flexWrap: 'wrap',
+        marginBottom: '60px' 
+      }}>
+        {/* Free Plan (Subdued) */}
+        <div style={{
+          flex: '1',
+          minWidth: '320px',
+          maxWidth: '400px',
+          padding: '48px 40px',
+          background: 'rgba(255, 255, 255, 0.6)',
+          backdropFilter: 'blur(20px)',
+          border: '1px solid rgba(0,0,0,0.05)',
+          borderRadius: '24px',
+          boxShadow: '0 8px 32px rgba(0,0,0,0.03)',
           display: 'flex',
           flexDirection: 'column',
-          gap: '24px'
-        }}>
-          <div>
-            <h3 style={{ fontSize: '1.75rem', marginBottom: '8px' }}>Free</h3>
+          transition: 'transform 0.3s ease',
+        }}
+        onMouseOver={e => e.currentTarget.style.transform = 'translateY(-4px)'}
+        onMouseOut={e => e.currentTarget.style.transform = 'translateY(0)'}>
+          <div style={{ marginBottom: '32px' }}>
+            <h3 style={{ fontSize: '1.5rem', marginBottom: '8px', color: '#6B7280', fontWeight: 600 }}>Basic</h3>
             <div style={{
-              fontSize: '3rem',
-              fontWeight: 500,
+              fontSize: '3.5rem',
+              fontWeight: 700,
               fontFamily: 'var(--font-heading)',
-              marginBottom: '16px'
+              color: '#111827',
+              lineHeight: 1
             }}>
               $0
+            </div>
+            <div style={{ fontSize: '0.95rem', color: '#9CA3AF', fontWeight: 500, marginTop: '8px' }}>
+              Free forever
             </div>
           </div>
 
@@ -287,108 +341,35 @@ const PremiumPage = () => {
             margin: 0,
             display: 'flex',
             flexDirection: 'column',
-            gap: '14px',
+            gap: '18px',
             flexGrow: 1
           }}>
-            <li style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <CheckCircle size={20} color="var(--accent-green)" weight="fill" />
+            <li style={{ display: 'flex', alignItems: 'center', gap: '12px', color: '#4B5563', fontWeight: 500 }}>
+              <CheckCircle size={22} color="#9CA3AF" weight="fill" />
               Track up to 10 cards
             </li>
-            <li style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <CheckCircle size={20} color="var(--accent-green)" weight="fill" />
+            <li style={{ display: 'flex', alignItems: 'center', gap: '12px', color: '#4B5563', fontWeight: 500 }}>
+              <CheckCircle size={22} color="#9CA3AF" weight="fill" />
               Real-time price data
             </li>
-            <li style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <CheckCircle size={20} color="var(--accent-green)" weight="fill" />
+            <li style={{ display: 'flex', alignItems: 'center', gap: '12px', color: '#4B5563', fontWeight: 500 }}>
+              <CheckCircle size={22} color="#9CA3AF" weight="fill" />
               30-day price history
             </li>
-            <li style={{ display: 'flex', alignItems: 'center', gap: '10px', opacity: 0.4 }}>
-              <X size={20} />
+            <li style={{ display: 'flex', alignItems: 'center', gap: '12px', color: '#9CA3AF', opacity: 0.6 }}>
+              <X size={22} />
               No price alerts
             </li>
-            <li style={{ display: 'flex', alignItems: 'center', gap: '10px', opacity: 0.4 }}>
-              <X size={20} />
+            <li style={{ display: 'flex', alignItems: 'center', gap: '12px', color: '#9CA3AF', opacity: 0.6 }}>
+              <X size={22} />
               Ads displayed
             </li>
           </ul>
         </div>
 
-        {/* Premium Plan */}
-        <div className="glass-panel" style={{
-          padding: '40px',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '24px',
-          border: '2px solid var(--accent-terracotta)',
-          background: 'linear-gradient(135deg, var(--bg-white) 0%, var(--accent-terracotta-tint) 100%)',
-          position: 'relative'
-        }}>
-          <div style={{
-            position: 'absolute',
-            top: '-14px',
-            right: '24px',
-            background: 'var(--accent-terracotta)',
-            color: 'white',
-            padding: '6px 16px',
-            borderRadius: 'var(--radius-pill)',
-            fontSize: '0.85rem',
-            fontWeight: 600
-          }}>
-            Best Value
-          </div>
-
-          <div>
-            <h3 style={{ fontSize: '1.75rem', marginBottom: '8px', color: 'var(--accent-terracotta)' }}>
-              Premium
-            </h3>
-            <div style={{
-              fontSize: '3rem',
-              fontWeight: 500,
-              fontFamily: 'var(--font-heading)',
-              color: 'var(--accent-terracotta)',
-              marginBottom: '4px'
-            }}>
-              $9.99
-            </div>
-            <div style={{ fontSize: '0.95rem', color: 'var(--text-secondary)', fontWeight: 500 }}>
-              One-time • Lifetime access
-            </div>
-          </div>
-
-          <ul style={{
-            listStyle: 'none',
-            padding: 0,
-            margin: 0,
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '14px',
-            flexGrow: 1
-          }}>
-            <li style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <CheckCircle size={20} color="var(--accent-terracotta)" weight="fill" />
-              <strong>Unlimited</strong> card tracking
-            </li>
-            <li style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <CheckCircle size={20} color="var(--accent-terracotta)" weight="fill" />
-              <strong>Instant</strong> price drop alerts
-            </li>
-            <li style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <CheckCircle size={20} color="var(--accent-terracotta)" weight="fill" />
-              90-day price history
-            </li>
-            <li style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <CheckCircle size={20} color="var(--accent-terracotta)" weight="fill" />
-              Ad-free experience
-            </li>
-            <li style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <CheckCircle size={20} color="var(--accent-terracotta)" weight="fill" />
-              Priority support
-            </li>
-          </ul>
-        </div>
+        {/* Premium Plan Component */}
+        <PremiumUpgrade />
       </div>
-
-      <PremiumUpgrade />
     </div>
   );
 };
