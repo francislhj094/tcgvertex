@@ -509,6 +509,25 @@ const LPChecklist = () => {
                     placeholder="Enter card name (e.g. Charizard, Gengar, Umbreon)..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        if (searchTimeoutRef.current) {
+                          clearTimeout(searchTimeoutRef.current);
+                        }
+                        if (searchQuery.trim().length >= 2) {
+                          setLoading(true);
+                          setShowResults(true);
+                          searchCards(searchQuery).then(results => {
+                            setSearchResults(results.slice(0, 6));
+                            setLoading(false);
+                          }).catch(err => {
+                            console.error(err);
+                            setLoading(false);
+                          });
+                        }
+                      }
+                    }}
                     style={{
                       width: '100%',
                       padding: '16px 16px 16px 48px',

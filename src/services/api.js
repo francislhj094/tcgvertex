@@ -45,8 +45,8 @@ export const searchCards = async (query = '', page = 1) => {
   try {
     let qParam = '';
     if (query) {
-      // Fuzzy match on name
-      qParam = `q=name:"*${query}*"`;
+      // Prefix match on name for significantly faster query performance
+      qParam = `q=name:"${query}*"`;
     } else {
       // If no query, just fetch some high value cards
       qParam = `q=supertype:Pokémon`;
