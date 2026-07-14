@@ -1,0 +1,56 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/$1"
+    },
+    {
+      "source": "/sitemap.xml",
+      "destination": "/api/sitemap"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ],
+  "functions": {
+    "api/create-checkout.js": {
+      "memory": 1024,
+      "maxDuration": 10
+    },
+    "api/webhook.js": {
+      "memory": 1024,
+      "maxDuration": 10
+    },
+    "api/monitor-alerts.js": {
+      "memory": 1024,
+      "maxDuration": 60
+    },
+    "api/send-alert-email.js": {
+      "memory": 1024,
+      "maxDuration": 10
+    },
+    "api/send-contact.js": {
+      "memory": 1024,
+      "maxDuration": 10
+    },
+    "api/snapshot-prices.js": {
+      "memory": 1024,
+      "maxDuration": 60
+    },
+    "api/sitemap.js": {
+      "memory": 1024,
+      "maxDuration": 15
+    }
+  },
+  "crons": [
+    {
+      "path": "/api/monitor-alerts",
+      "schedule": "0 0 * * *"
+    },
+    {
+      "path": "/api/snapshot-prices",
+      "schedule": "0 1 * * *"
+    }
+  ]
+}

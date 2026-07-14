@@ -1,0 +1,115 @@
+/* ====== Mobile Responsive — All Pages ====== */
+
+/* Tablet breakpoint (900px) */
+@media (max-width: 900px) {
+  /* LP hero sections: 2-col -> 1-col */
+  .lp-hero-grid {
+    grid-template-columns: 1fr !important;
+    gap: 40px !important;
+    text-align: center;
+  }
+
+  /* LP comparison (without vs with) */
+  .lp-comparison-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* LP features grid */
+  .lp-features-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Card detail page layout */
+  .card-detail-layout {
+    grid-template-columns: 1fr !important;
+    gap: 40px !important;
+  }
+
+  .card-detail-layout .card-image-col {
+    position: static !important;
+    max-width: 400px !important;
+    margin: 0 auto !important;
+  }
+
+  /* Homepage pricing cards */
+  .pricing-cards {
+    flex-direction: column !important;
+    align-items: center !important;
+  }
+
+  .pricing-cards > div {
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+}
+
+/* Mobile breakpoint (768px) */
+@media (max-width: 768px) {
+  /* Show floating CTA on LP pages */
+  .lp-floating-cta {
+    display: block !important;
+  }
+
+  /* LP steps: 3-col -> 1-col */
+  .lp-steps-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* LP testimonials: 3-col -> 1-col */
+  .lp-testimonials-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* LP speed stats: 3-col -> 1-col */
+  .lp-speed-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* LP stats bar: row -> column */
+  .lp-stats-bar {
+    flex-direction: column !important;
+    gap: 24px !important;
+  }
+
+  /* LP hero headings */
+  .lp-hero-grid h1 {
+    font-size: 2.2rem !important;
+  }
+
+  .lp-hero-grid p {
+    font-size: 1rem !important;
+  }
+
+  /* Sets page banner */
+  .sets-banner img {
+    height: 200px !important;
+  }
+
+  .sets-banner h1 {
+    font-size: 2rem !important;
+  }
+
+  /* Add bottom padding when floating CTA is visible */
+  .lp-floating-cta ~ div {
+    padding-bottom: 80px;
+  }
+}
+
+/* Small mobile breakpoint (480px) */
+@media (max-width: 480px) {
+  .lp-hero-grid h1 {
+    font-size: 1.8rem !important;
+  }
+
+  /* Ensure images never overflow */
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* LP CTA buttons: full width */
+  .lp-hero-grid .btn-primary {
+    width: 100%;
+    justify-content: center;
+  }
+}
