@@ -22,6 +22,7 @@ import LPFreeTracker from './pages/LPFreeTracker';
 import LPPriceAlerts from './pages/LPPriceAlerts';
 import DeveloperDashboard from './pages/DeveloperDashboard';
 import PublicProfile from './pages/PublicProfile';
+import ProfilePage from './pages/ProfilePage';
 import MarketMovers from './pages/MarketMovers';
 import LPChecklist from './pages/LPChecklist';
 
@@ -64,6 +65,7 @@ const AppLayout = () => {
           <Route path="/about" element={<AboutPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/developer" element={<DeveloperDashboard />} />
+          <Route path="/profile" element={<ProfilePage />} />
           <Route path="/u/:username" element={<PublicProfile />} />
         </Routes>
       </main>

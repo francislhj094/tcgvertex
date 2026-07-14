@@ -4,6 +4,7 @@ import { ChartLineUp, IdentificationCard, List, X, GridFour, Wallet, SignOut, Us
 import AuthModal from './AuthModal';
 import UpgradeModal from './UpgradeModal';
 import CountrySelector from './CountrySelector';
+import UserDropdown from './UserDropdown';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import { useTranslation } from '../translations/useTranslation';
@@ -84,15 +85,7 @@ const Navbar = () => {
           <div className="nav-actions flex-center" style={{ gap: '12px', flexShrink: 0 }}>
             <CountrySelector />
             {user ? (
-              <>
-                <div className="flex-center" style={{ gap: '6px', color: 'var(--text-secondary)', fontSize: '0.9rem', flexShrink: 0 }}>
-                  <UserCircle size={22} weight="fill" color="var(--accent-terracotta)" />
-                  <span style={{ fontWeight: 500, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '120px' }}>{user.name}</span>
-                </div>
-                <button className="btn-outline" style={{ padding: '8px 16px', whiteSpace: 'nowrap', flexShrink: 0 }} onClick={handleLogout}>
-                  <SignOut size={16} weight="bold" /> {t('nav.logout')}
-                </button>
-              </>
+              <UserDropdown />
             ) : (
               <button className="btn-outline" style={{ padding: '8px 16px', whiteSpace: 'nowrap', flexShrink: 0 }} onClick={() => setAuthModalOpen(true)}>
                 {t('nav.login')}
